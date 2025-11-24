@@ -3,32 +3,18 @@ const jwt = require('jsonwebtoken');
 
 // Generate token
 const sendTokenResponse = (user, statusCode, res) => {
-  // Create token
   const token = user.getSignedJwtToken();
 
-  const options = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true
-  };
-
-  if (process.env.NODE_ENV === 'production') {
-    options.secure = true;
-  }
-
-  res
-    .status(statusCode)
-    .json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
-    });
+  res.status(statusCode).json({
+    success: true,
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    }
+  });
 };
 
 // @desc    Register user
@@ -36,7 +22,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 // @access  Public
 const register = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, role } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -52,7 +38,8 @@ const register = async (req, res) => {
       name,
       email,
       password,
-      phone
+      phone,
+      role: role || 'user' // Default to 'user' if no role provided
     });
 
     sendTokenResponse(user, 201, res);
