@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const {
   getDoctors,
   getDoctorsByDepartment,
@@ -9,26 +8,16 @@ const {
   deleteDoctor,
   addSampleDoctors
 } = require('../controllers/doctorController');
+const { protect, admin } = require('../middlewares/auth');
 
-// GET /api/doctors - Get all doctors
+const router = express.Router();
+
 router.get('/', getDoctors);
-
-// GET /api/doctors/department/:department - Get doctors by department
 router.get('/department/:department', getDoctorsByDepartment);
-
-// GET /api/doctors/:id - Get single doctor by ID
 router.get('/:id', getDoctorById);
-
-// POST /api/doctors - Create new doctor
-router.post('/', createDoctor);
-
-// PUT /api/doctors/:id - Update doctor
-router.put('/:id', updateDoctor);
-
-// DELETE /api/doctors/:id - Delete doctor
-router.delete('/:id', deleteDoctor);
-
-// POST /api/doctors/sample - Add sample doctors (for testing)
-router.post('/sample', addSampleDoctors);
+router.post('/', protect, admin, createDoctor);
+router.put('/:id', protect, admin, updateDoctor);
+router.delete('/:id', protect, admin, deleteDoctor);
+router.post('/sample', protect, admin, addSampleDoctors);
 
 module.exports = router;

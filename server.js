@@ -9,6 +9,7 @@ const connectDB = require('./config/db')
 const appointmentRoutes = require('./routes/appointments');
 const doctorRoutes = require('./routes/doctors');
 const contactRoutes = require('./routes/contact'); 
+const authRoutes = require('./routes/auth')
 
 
 
@@ -28,6 +29,7 @@ connectDB()
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
     res.json({

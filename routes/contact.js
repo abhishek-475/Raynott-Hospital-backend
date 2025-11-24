@@ -1,8 +1,10 @@
 const express = require('express');
-const router = express.Router();
 const { submitContactForm, getContactMessages } = require('../controllers/contactController');
+const { protect, admin } = require('../middlewares/auth');
+
+const router = express.Router();
 
 router.post('/', submitContactForm);
-router.get('/', getContactMessages); // For admin to view messages
+router.get('/', protect, admin, getContactMessages);
 
 module.exports = router;

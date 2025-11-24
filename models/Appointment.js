@@ -9,8 +9,7 @@ const appoinmentSchema = new mongoose.Schema(
         },
         patientEmail: {
             type: String,
-            required: true,
-            unique: true
+            required: true
         },
         patientPhone: {
             type: String,

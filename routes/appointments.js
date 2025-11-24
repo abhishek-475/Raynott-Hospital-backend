@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const {
   createAppointment,
   getAppointments,
@@ -8,23 +7,15 @@ const {
   deleteAppointment,
   getAppointmentsByEmail
 } = require('../controllers/appointmentController');
+const { protect, admin } = require('../middlewares/auth');
 
-// POST /api/appointments - Create new appointment
+const router = express.Router();
+
 router.post('/', createAppointment);
-
-// GET /api/appointments - Get all appointments
-router.get('/', getAppointments);
-
-// GET /api/appointments/:id - Get single appointment by ID
-router.get('/:id', getAppointmentById);
-
-// PUT /api/appointments/:id/status - Update appointment status
-router.put('/:id/status', updateAppointmentStatus);
-
-// DELETE /api/appointments/:id - Delete appointment
-router.delete('/:id', deleteAppointment);
-
-// GET /api/appointments/email/:email - Get appointments by patient email
-router.get('/email/:email', getAppointmentsByEmail);
+router.get('/', protect, admin, getAppointments);
+router.get('/:id', protect, getAppointmentById);
+router.put('/:id/status', protect, admin, updateAppointmentStatus);
+router.delete('/:id', protect, admin, deleteAppointment);
+router.get('/email/:email', protect, getAppointmentsByEmail);
 
 module.exports = router;
