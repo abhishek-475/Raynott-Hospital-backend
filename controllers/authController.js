@@ -114,52 +114,9 @@ const getMe = async (req, res) => {
   }
 };
 
-// @desc    Register admin (protected)
-// @route   POST /api/auth/register-admin
-// @access  Private/Admin
-const registerAdmin = async (req, res) => {
-  try {
-    const { name, email, password, phone } = req.body;
-
-    // Check if user exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({
-        success: false,
-        error: 'User already exists with this email'
-      });
-    }
-
-    // Create admin user
-    const user = await User.create({
-      name,
-      email,
-      password,
-      phone,
-      role: 'admin'
-    });
-
-    res.status(201).json({
-      success: true,
-      message: 'Admin user created successfully',
-      data: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
-  }
-};
 
 module.exports = {
   register,
   login,
   getMe,
-  registerAdmin
 };
